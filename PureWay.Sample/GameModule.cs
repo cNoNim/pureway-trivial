@@ -11,9 +11,8 @@ public partial class GameModule
 	[Conditional("DI")]
 	[UsedImplicitly]
 	private static void Setup() =>
-		DI.Setup(nameof(GameModule))
+		DI.Setup()
 		  .Hint(Hint.Resolve,  "Off")
-		  .Hint(Hint.ToString, "On")
 		  .Root<Game>(nameof(Game))
 		  .Bind().As(Singleton).To<DiagnosticsModule>()
 		  .Bind<ILogger<TT>>().To(
@@ -24,6 +23,12 @@ public partial class GameModule
 				   return module.MakeLogger<TT>(logObservers);
 			   })
 		  .Bind().As(Singleton).To<EcsModule>()
+		  .Bind<Filter<TT>>().To(
+			   context =>
+			   {
+				   context.Inject(out EcsModule module);
+				   return module.Filter<TT>();
+			   })
 		  .Bind().To(
 			   context =>
 			   {

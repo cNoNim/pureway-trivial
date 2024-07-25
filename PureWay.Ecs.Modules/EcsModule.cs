@@ -8,5 +8,11 @@ public partial class EcsModule
 	private static void Setup() =>
 		DI.Setup()
 		  .Hint(Hint.Resolve, "Off")
+		  .Bind().To(context =>
+		   {
+			   context.Inject(out World world);
+			   return world.Filter<TT>();
+		   })
+		  .Root<Filter<TT>>("Filter")
 		  .Root<World>("World");
 }
