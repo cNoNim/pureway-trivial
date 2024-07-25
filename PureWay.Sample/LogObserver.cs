@@ -1,18 +1,16 @@
-using Leopotam.EcsLite;
 using PureWay.Core.Diagnostics;
 
 namespace PureWay.Sample;
 
-public sealed class LogObserver(EcsWorld world) : IObserver<LogEntry>
+public sealed class LogObserver(World world) : IObserver<LogEntry>
 {
-	private readonly EcsFilter      _filter    = world.Filter<OnLog>().End();
-	private readonly EcsPool<OnLog> _onLogPool = world.GetPool<OnLog>();
+	private readonly Filter<OnLog>      _filter    = world.Filter<OnLog>();
 	public void OnCompleted() {}
 	public void OnError(Exception error) {}
 
 	public void OnNext(LogEntry entry)
 	{
-		foreach (var entity in _filter)
-			_onLogPool.Get(entity).Apply(entry);
+		foreach (var onLog in _filter)
+			onLog.Apply(entry);
 	}
 }

@@ -1,6 +1,4 @@
-﻿using Leopotam.EcsLite;
-
-namespace PureWay.Ecs.Modules;
+﻿namespace PureWay.Ecs.Modules;
 
 public partial class EcsModule
 {
@@ -10,5 +8,5 @@ public partial class EcsModule
 	private static void Setup() =>
 		DI.Setup()
 		  .Hint(Hint.Resolve, "Off")
-		  .Root<EcsWorld>("World");
+		  .Root<World>("World");
 }

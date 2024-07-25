@@ -1,43 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>9</LangVersion>
-        <ImplicitUsings>disabled</ImplicitUsings>
-        <Nullable>disable</Nullable>
-        <RootNamespace>Leopotam.EcsLite</RootNamespace>
-        <EnableDefaultItems>false</EnableDefaultItems>
-
-        <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
-        <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
-
-    <Target Name="ComputeNpmPackageMetadata">
-        <ItemGroup>
-            <NpmPackageFile>
-                <StampFile>$([System.IO.Path]::Combine(`%(RootDir)%(Directory)`, 'node_modules', '.install-stamp'))</StampFile>
-                <WorkingDirectory>%(RootDir)%(Directory)</WorkingDirectory>
-                <Command Condition="'$(RestorePackagesWithLockFile)' != 'true'">npm install</Command>
-                <Command Condition="'$(RestorePackagesWithLockFile)' == 'true'">npm ci</Command>
-            </NpmPackageFile>
-        </ItemGroup>
-    </Target>
-
-    <Target Name="NpmInstall"
-            DependsOnTargets="ComputeNpmPackageMetadata"
-            Inputs="@(NpmPackageFile)"
-            Outputs="%(NpmPackageFile.StampFile)"
-            BeforeTargets="ResolveAssemblyReferences">
-        <Exec Command="@(NpmPackageFile->'%(Command)')" WorkingDirectory="%(WorkingDirectory)"/>
-        <Touch Files="@(NpmPackageFile->'%(StampFile)')" AlwaysCreate="true"/>
-    </Target>
-
-    <ItemGroup>
-        <NpmPackageFile Include="package.json"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Include="node_modules\com.leopotam.ecslite\src\*.cs" />
-    </ItemGroup>
 
 </Project>
